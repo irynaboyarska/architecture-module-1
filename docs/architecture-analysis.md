@@ -68,13 +68,15 @@ OrderFlow лишається modular monolith. Ми не переписуємо 
 
 ## 4. Principles на конкретних місцях
 
+## 4. Principles на конкретних місцях
+
 | Принцип                  | Де порушено                                                                   | Що змінюється                                                                                                                                    |
-| ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --- | --- |
+| ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Information Hiding**   | Payments знає repository Orders; Orders знає таблицю `products`               | `PaymentRequest {orderId, amountCents, currency, idempotencyKey}` приходить від Checkout, Payments Orders не читає. Ціна береться з PricingRules |
 | **Explicit Contracts**   | Контракти неявні, idempotency лише в Inventory                                | `PaymentGateway` port, `PaymentRequest`, ключ idempotency на `/checkout`, contract tests                                                         |
 | **Dependency Direction** | Checkout чекає на Notifications; Reporting тягне дані з усіх модулів          | Notifications і Reporting залежать від подій (`OrderCompleted`, `PaymentCaptured`), а не навпаки                                                 |
 | **Ownership**            | Ніхто не володіє ціною, snapshot ціни відсутній, Reporting читає чужі таблиці | Orders володіє order і price lines (з PricingRules), Reporting володіє read model                                                                |
-| **Fitness Functions**    | Нічого автоматично не захищає межі                                            | Правила FF-1…FF-6 і review rule з розділу 10 (dependency rules, behavior rules, metric thresholds)                                               |     |     |
+| **Fitness Functions**    | Нічого автоматично не захищає межі                                            | Правила FF-1…FF-6 і review rule з розділу 10 (dependency rules, behavior rules, metric thresholds)                                               |
 
 ## 5. Proposed architecture
 
